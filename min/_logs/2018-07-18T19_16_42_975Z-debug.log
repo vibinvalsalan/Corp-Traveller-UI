@@ -1,0 +1,37 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'ng2-file-upload',
+1 verbose cli   '--save' ]
+2 info using npm@5.6.0
+3 info using node@v8.9.4
+4 verbose npm-session 4211ec7c0ae7a943
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData error for ng2-file-upload@latest request to https://registry.npmjs.org/ng2-file-upload failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+8 verbose type system
+9 verbose stack FetchError: request to https://registry.npmjs.org/ng2-file-upload failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+9 verbose stack     at ClientRequest.req.on.err (C:\Program Files\nodejs\node_modules\npm\node_modules\pacote\node_modules\make-fetch-happen\node_modules\node-fetch-npm\src\index.js:68:14)
+9 verbose stack     at emitOne (events.js:116:13)
+9 verbose stack     at ClientRequest.emit (events.js:211:7)
+9 verbose stack     at TLSSocket.socketErrorListener (_http_client.js:387:9)
+9 verbose stack     at emitOne (events.js:116:13)
+9 verbose stack     at TLSSocket.emit (events.js:211:7)
+9 verbose stack     at emitErrorNT (internal/streams/destroy.js:64:8)
+9 verbose stack     at _combinedTickCallback (internal/process/next_tick.js:138:11)
+9 verbose stack     at process._tickCallback (internal/process/next_tick.js:180:9)
+10 verbose cwd D:\_vibin_tfs_map\Solutions\Corp.Traveller\angular\Corp-Traveller-UI
+11 verbose Windows_NT 10.0.16299
+12 verbose argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "ng2-file-upload" "--save"
+13 verbose node v8.9.4
+14 verbose npm  v5.6.0
+15 error code ENOTFOUND
+16 error errno ENOTFOUND
+17 error network request to https://registry.npmjs.org/ng2-file-upload failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org registry.npmjs.org:443
+18 error network This is a problem related to network connectivity.
+18 error network In most cases you are behind a proxy or have bad network settings.
+18 error network
+18 error network If you are behind a proxy, please make sure that the
+18 error network 'proxy' config is set properly.  See: 'npm help config'
+19 verbose exit [ 1, true ]

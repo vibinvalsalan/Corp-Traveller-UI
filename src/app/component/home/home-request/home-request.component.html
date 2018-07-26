@@ -1,0 +1,14 @@
+<mat-list>
+  <h3 mat-subheader>Requests</h3>
+  <mat-list-item *ngFor="let tkt of tkts">
+    <mat-icon mat-list-icon>flight</mat-icon>
+    <h4 mat-line>{{tkt.TicketNumber}}</h4>
+    <p mat-line>Created Date : {{tkt.CreatedDate | date}} </p>
+    <div class="d-flex w-100 justify-content-between">
+            <small>{{GetValue(tkt.Status)}}</small>
+    </div>
+    <div class="d-flex w-100 justify-content-between">
+      <button mat-button color="warn" (click)="seeTicketDetails(tkt)">Open</button>
+    </div>
+  </mat-list-item>
+</mat-list>

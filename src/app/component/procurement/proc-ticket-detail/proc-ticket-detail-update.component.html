@@ -1,0 +1,17 @@
+<h2 mat-dialog-title>Comment/Reason required</h2>
+<form [formGroup]="commentForm" (ngSubmit)="Create()" #comment="ngForm" class="example-form">
+    <mat-form-field style="width: 400px;">
+        <input
+            matInput
+            formControlName="comments"
+            required
+            placeholder="Please mention the reason for this.."/>
+            <mat-error *ngIf="commentForm.controls.comments.hasError('required')">Required</mat-error>
+    </mat-form-field>
+    <mat-divider></mat-divider>
+    <button mat-button color="primary" type="submit">
+        <mat-icon>thumb_up</mat-icon>
+        Confirm</button>
+    <button mat-button [mat-dialog-close]="true">Close</button>
+</form>
+    <!-- [(ngModel)]="username"  -->

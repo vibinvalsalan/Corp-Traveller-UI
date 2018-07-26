@@ -1,0 +1,332 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <span>Ticket Details</span>
+        <span class="example-spacer"></span>
+        <mat-icon class="example-icon">favorite</mat-icon>
+        <mat-icon class="example-icon">delete</mat-icon>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-progress-bar mode="indeterminate" *ngIf="updating" color="warn"></mat-progress-bar>
+<button
+    mat-button
+    color="warn"
+    (click)="openDialog(21)"
+    matTooltip="Click Cancel, if you want to cancel the request, no changes can be done">
+    <mat-icon>cancel</mat-icon>Cancel Request</button>
+<mat-card class="example-card" *ngIf="tkt">
+    <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>
+            <strong>{{tkt.TicketNumber}}</strong>
+        </mat-card-title>
+        <mat-card-subtitle>Created By
+            {{tkt.CreatedBy}}
+            on
+            {{tkt.CreatedDate | date}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-chip-list>
+            <mat-chip *ngIf="errors" color="warn" selected>{{errors}}</mat-chip>
+        </mat-chip-list>
+        <mat-list dense>
+            <mat-list-item>
+                <strong>Current Status</strong>
+                :
+                {{GetValue(tkt.Status)}}
+            </mat-list-item>
+            <mat-list-item *ngFor="let userdetail of userdetails">
+                <strong>{{GetDetailsFormatted(userdetail)}}</strong>
+            </mat-list-item>
+        </mat-list>
+    </mat-card-content>
+    <mat-card-actions>
+        <button
+            mat-button
+            color="primary"
+            (click)="openDialog(10)"
+            matTooltip="Click Proceed, if you wish to proceed with this request"
+            *ngIf="tkt.Status === 3">
+            <mat-icon>check</mat-icon>Proceed</button>
+        <button
+            mat-button
+            color="primary"
+            (click)="openDialog(11)"
+            matTooltip="Click Send to Employee, if you there is any changes required from the employee"
+            *ngIf="tkt.Status === 3">
+            <mat-icon>send</mat-icon>Send to Employee</button>
+        <button
+            mat-button
+            color="primary"
+            (click)="openDialog(12)"
+            matTooltip="Click Close, if you have completed the activities for the ticket request"
+            *ngIf="tkt.Status === 10">
+            <mat-icon>flight</mat-icon>Close</button>
+        <button
+            mat-button
+            color="primary"
+            (click)="openDialog(15)"
+            matTooltip="Click No Response,if you want to close this ticket since the user has not replied back for long"
+            *ngIf="tkt.Status === 11">
+            <mat-icon>sentiment_neutral</mat-icon>No Response</button>
+        <button
+            mat-button
+            color="warn"
+            (click)="openDialog(13)"
+            matTooltip="Click here, if user do not want to proceed with the ticket request"
+            *ngIf="tkt.Status === 10">
+            <mat-icon>airplanemode_inactive</mat-icon>Not Accepted By User</button>
+        <button
+            mat-button
+            color="warn"
+            matTooltip="Click to send reminder to employee"
+            *ngIf="tkt.Status === 11"
+            (click)="openDialog(14)">
+            <mat-icon>add_alert</mat-icon>Send Reminder</button>
+    </mat-card-actions>
+</mat-card>
+<br>
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let tktdetail of tktdetails">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <mat-icon svgIcon={{tktdetail.Prefix}}></mat-icon>
+                    <strong>{{tktdetail.Prefix}}
+                        {{tktdetail.FirstName}}
+                        {{tktdetail.FamilyName}}
+                    </strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <mat-chip-list>
+                        <mat-chip>
+                            Destination Country :{{tktdetail.DestinationCountry}}
+                        </mat-chip>
+                        <mat-chip>{{GetTripType(tktdetail.TripType)}}</mat-chip>
+                        <mat-chip color="primary" selected>Date of Birth:{{tktdetail.DateOfBirth | date}}</mat-chip>
+                        <mat-chip color="accent" selected>SFID:{{tktdetail.EmployeeId}}</mat-chip>
+                    </mat-chip-list>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <button
+                mat-button
+                color="warn"
+                matTooltip="Click to download passport copy"
+                (click)="exportPdf(tktdetail)">
+                <mat-icon>file_download
+                </mat-icon>Passport</button>
+            <mat-list dense>
+                <mat-list-item>
+                    <strong>Departing Flight Date({{tktdetail.DepartureDate | date}})</strong>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon>flight_takeoff</mat-icon>{{tktdetail.DepartureCity}}
+                    ({{tktdetail.DeparturePhone}})
+                    <mat-icon>phone</mat-icon>
+                </mat-list-item>
+                <mat-list-item>
+                    <img src="assets/images/dotted.png" style='height: 150%;object-fit: contain'/>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon>flight_land</mat-icon>{{tktdetail.DestinationAirport}}
+                    ({{tktdetail.DestinationPhone}})
+                    <mat-icon>phone</mat-icon>
+                </mat-list-item>
+            </mat-list>
+            <mat-divider></mat-divider>
+            <mat-list
+                dense
+                *ngIf="tktdetail.TripType === '2' || tktdetail.TripType === 'Two Way'">
+                <mat-list-item>
+                    <strong>Returning flights Date({{tktdetail.ReturnDate | date}})</strong>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon>flight_takeoff</mat-icon>{{tktdetail.DestinationAirport}}
+                    ({{tktdetail.DestinationPhone}})
+                    <mat-icon>phone</mat-icon>
+                </mat-list-item>
+                <mat-list-item>
+                    <img src="assets/images/dotted.png" style='height: 150%;object-fit: contain'/>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon>flight_land</mat-icon>{{tktdetail.DepartureCity}}
+                    ({{tktdetail.DeparturePhone}})
+                    <mat-icon>phone</mat-icon>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <strong>Data For Emailing</strong>
+                </mat-panel-title>
+                <mat-panel-description color="warn">
+                    You can copy the data here for emailing to the suppliers
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <table>
+                <tr *ngFor="let tktdetail of tktdetails ,let i = index">
+                    <td>
+                        <table>
+                            <tr>
+                                <td class="blue-text">
+                                    <strong>Passenger
+                                        {{i+1}}</strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>EmployeeId</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.EmployeeId}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Prefix</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.Prefix}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>First Name</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.FirstName}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Family Name</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.FamilyName}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Date Of Birth</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.DateOfBirth | date}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Employee Email</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tkt.Email}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Departure phone</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.DeparturePhone}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Destination Phone</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.DestinationPhone}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Trip Type</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{GetTripType(tktdetail.TripType)}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Departure City</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.DepartureCity}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Destination Country</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.DestinationCountry}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Destination Airport</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.DestinationAirport}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Departure Date</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.DepartureDate | date}}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Return Date</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.ReturnDate | date}}</td>
+                            </tr>
+                            <!--<tr>
+                                <td>
+                                    <strong>Employee Comment</strong>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>{{tktdetail.EmployeeId}}</td>
+                            </tr>
+                             <tr>
+                                    <td>
+                                        <strong>Departure Date</strong></td>
+                                    <td>{{tktdetail.EmployeeId}}</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <strong>Departure Date</strong></td>
+                                    <td>{{tktdetail.EmployeeId}}</td>
+                                </tr> -->
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <div style="width: 80%">
+        <mat-list dense>
+            <mat-card>
+                <strong>Ticket Logs</strong>
+            </mat-card>
+
+            <mat-list-item>
+                <div class="d-flex w-100 justify-content-between">
+                    <strong>Action</strong>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <strong>Created By</strong>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <strong>Created Date</strong>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <strong>Comments</strong>
+                </div>
+            </mat-list-item>
+            <mat-list-item *ngFor="let log of tktlogs">
+                <div class="d-flex w-100 justify-content-between">
+                    {{log.Action}}
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    {{log.CreatedBy}}
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    {{log.CreatedDate | date}}
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    {{log.Comment}}
+                </div>
+            </mat-list-item>
+        </mat-list>
+    </div>

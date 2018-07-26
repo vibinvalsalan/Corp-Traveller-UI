@@ -1,0 +1,17 @@
+<mat-tab-group>
+  <mat-tab label="Pending Requests">
+    <ng-template matTabContent>
+      <app-proc-pending></app-proc-pending>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Closed Requests">
+    <ng-template matTabContent>
+      <app-proc-closed></app-proc-closed>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="Cancelled Requests">
+    <ng-template matTabContent>
+      <app-proc-cancelled></app-proc-cancelled>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

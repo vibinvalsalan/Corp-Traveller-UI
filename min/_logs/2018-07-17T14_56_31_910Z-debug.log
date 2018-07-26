@@ -1,0 +1,53 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '--save',
+1 verbose cli   '@angular/material',
+1 verbose cli   '@angular/cdk' ]
+2 info using npm@5.6.0
+3 info using node@v8.9.4
+4 verbose npm-session fba81bc0fd71bbc8
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 info lifecycle @angular/cdk@6.4.0-cc33f57~prepack: @angular/cdk@6.4.0-cc33f57
+8 info lifecycle @angular/cdk@6.4.0-cc33f57~postpack: @angular/cdk@6.4.0-cc33f57
+9 silly pacote git manifest for @angular/cdk@github:angular/cdk-builds fetched in 29179ms
+10 info lifecycle @angular/material@6.4.0-cc33f57~prepack: @angular/material@6.4.0-cc33f57
+11 info lifecycle @angular/material@6.4.0-cc33f57~postpack: @angular/material@6.4.0-cc33f57
+12 silly pacote git manifest for @angular/material@github:angular/material2-builds fetched in 185914ms
+13 silly install loadIdealTree
+14 silly install cloneCurrentTreeToIdealTree
+15 silly install loadShrinkwrap
+16 silly install loadAllDepsIntoIdealTree
+17 silly resolveWithNewModule @angular/cdk@6.4.0-cc33f57 checking installable status
+18 silly resolveWithNewModule @angular/material@6.4.0-cc33f57 checking installable status
+19 http fetch GET 304 https://registry.npmjs.org/parse5 5384ms (from cache)
+20 silly pacote range manifest for parse5@^5.0.0 fetched in 5823ms
+21 silly resolveWithNewModule parse5@5.0.0 checking installable status
+22 verbose stack Error: EPERM: operation not permitted, unlink 'D:\_vibin_tfs_map\Solutions\Corp.Traveller\angular\Corp-Traveller-UI\min\_cacache\tmp\git-clone-93ea4852\bundles'
+23 verbose cwd D:\_vibin_tfs_map\Solutions\Corp.Traveller\angular\Corp-Traveller-UI
+24 verbose Windows_NT 10.0.16299
+25 verbose argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "--save" "@angular/material" "@angular/cdk"
+26 verbose node v8.9.4
+27 verbose npm  v5.6.0
+28 error path D:\_vibin_tfs_map\Solutions\Corp.Traveller\angular\Corp-Traveller-UI\min\_cacache\tmp\git-clone-93ea4852\bundles
+29 error code EPERM
+30 error errno -4048
+31 error syscall unlink
+32 error Error: EPERM: operation not permitted, unlink 'D:\_vibin_tfs_map\Solutions\Corp.Traveller\angular\Corp-Traveller-UI\min\_cacache\tmp\git-clone-93ea4852\bundles'
+32 error  { Error: EPERM: operation not permitted, unlink 'D:\_vibin_tfs_map\Solutions\Corp.Traveller\angular\Corp-Traveller-UI\min\_cacache\tmp\git-clone-93ea4852\bundles'
+32 error   cause:
+32 error    { Error: EPERM: operation not permitted, unlink 'D:\_vibin_tfs_map\Solutions\Corp.Traveller\angular\Corp-Traveller-UI\min\_cacache\tmp\git-clone-93ea4852\bundles'
+32 error      errno: -4048,
+32 error      code: 'EPERM',
+32 error      syscall: 'unlink',
+32 error      path: 'D:\\_vibin_tfs_map\\Solutions\\Corp.Traveller\\angular\\Corp-Traveller-UI\\min\\_cacache\\tmp\\git-clone-93ea4852\\bundles' },
+32 error   isOperational: true,
+32 error   stack: 'Error: EPERM: operation not permitted, unlink \'D:\\_vibin_tfs_map\\Solutions\\Corp.Traveller\\angular\\Corp-Traveller-UI\\min\\_cacache\\tmp\\git-clone-93ea4852\\bundles\'',
+32 error   errno: -4048,
+32 error   code: 'EPERM',
+32 error   syscall: 'unlink',
+32 error   path: 'D:\\_vibin_tfs_map\\Solutions\\Corp.Traveller\\angular\\Corp-Traveller-UI\\min\\_cacache\\tmp\\git-clone-93ea4852\\bundles' }
+33 error Please try running this command again as root/Administrator.
+34 verbose exit [ -4048, true ]

@@ -1,0 +1,46 @@
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let object of tkts | groupBy:'Status'">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <!-- <mat-icon svgIcon={{tktdetail.Prefix}}></mat-icon> -->
+                <strong>{{GetValue(object.key)}}
+                </strong>
+            </mat-panel-title>
+            <mat-panel-description>
+                <!-- <mat-chip-list>
+                    <mat-chip>
+                        Destination Country :{{tktdetail.DestinationCountry}}
+                    </mat-chip>
+                    <mat-chip>{{GetTripType(tktdetail.TripType)}}</mat-chip>
+                    <mat-chip color="primary" selected>Date of Birth:{{tktdetail.DateOfBirth | date}}</mat-chip>
+                    <mat-chip color="accent" selected>SFID:{{tktdetail.EmployeeId}}</mat-chip>
+                </mat-chip-list> -->
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-list>
+            <h3 mat-subheader>{{GetValue(object.key)}}
+                Requests</h3>
+            <mat-list-item *ngFor="let tkt of object.value">
+                <mat-icon mat-list-icon>flight</mat-icon>
+                <h4 mat-line>{{tkt.TicketNumber}}</h4>
+                <p mat-line>
+                    <small>Created By:
+                        {{tkt.CreatedBy}}
+                    </small>
+                </p>
+                <p matLine>
+                    <small>Created Date :
+                        {{tkt.CreatedDate | date}}</small>
+                </p>
+                <p matLine></p>
+                <div class="d-flex w-100 justify-content-between">
+                    <small>{{GetValue(tkt.Status)}}</small>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <button mat-button color="warn" (click)="seeTicketDetails(tkt)">Open</button>
+                </div>
+                <mat-divider></mat-divider>
+            </mat-list-item>
+        </mat-list>
+        <mat-divider></mat-divider>
+    </mat-expansion-panel>

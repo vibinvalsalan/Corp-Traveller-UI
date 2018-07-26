@@ -1,0 +1,420 @@
+<mat-tab-group>
+  <mat-tab label="Book Ticket">
+    <ng-template matTabContent>
+      <div class="grid-container">
+        <form [formGroup]="userform" (ngSubmit)="addRequest (user)" #user="ngForm">
+          <mat-accordion class="example-headers-align">
+            <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <strong>Personal Details</strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-chip-list>
+                    <mat-chip *ngIf="userform.value.sfid">
+                      {{userform.value.sfid}}
+                    </mat-chip>
+                    <mat-chip *ngIf="userform.value.prefix && userform.value.firstname && userform.value.lastname">
+                      {{userform.value.prefix}} . {{userform.value.firstname}} {{userform.value.lastname}}
+                    </mat-chip>
+                    <mat-chip *ngIf="userform.value.dobdt">
+                      {{userform.value.dobdt | date}}
+                    </mat-chip>
+                  </mat-chip-list>
+
+                  <mat-icon>account_circle</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div class="row">
+                <div class="col-md-3 col-lg-2 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input matInput (change)="checkCountry(userform.value.sfid)" placeholder="SuccessFactor Id" 
+                      formControlName="sfid" />
+                    <mat-error *ngIf="userform.controls.sfid.hasError('required')">
+                      SF Id is required.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-3 col-lg-2 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <mat-select placeholder="Prefix" (selectionChange)="getAge(userform.value.dobdt, userform.value.prefix)" 
+                      formControlName="prefix">
+                      <mat-option *ngFor="let prefix of Prefixs" [value]="prefix">
+                        {{prefix}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="userform.controls.prefix.hasError('required')">
+                      Prefix is required.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6 col-lg-4 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input matInput placeholder="First name" formControlName="firstname" />
+                    <mat-error *ngIf="userform.controls.firstname.hasError('required')">
+                      Name is required.
+                    </mat-error>
+                    <mat-error *ngIf="userform.controls.firstname.hasError('minlength')">
+                      Name must be at least 2 characters long.
+                    </mat-error>
+                    <mat-error *ngIf="userform.controls.firstname.hasError('forbiddenName')">
+                      Name cannot be Bob.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6 col-lg-4 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input matInput placeholder="Last name" formControlName="lastname" />
+                    <mat-error *ngIf="userform.controls.lastname.hasError('required')">
+                      Last Name is required.
+                    </mat-error>
+                    <mat-error *ngIf="userform.controls.lastname.hasError('minlength')">
+                      Last Name must be at least 4 characters long.
+                    </mat-error>
+                    <mat-error *ngIf="userform.controls.lastname.hasError('forbiddenName')">
+                      Last Name cannot be Bob.
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6 col-lg-2 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input matInput [matDatepicker]="dobpicker" placeholder="Date of Birth" [max]="maxDate" (dateChange)="getAge(userform.value.dobdt,userform.value.prefix)"
+                      formControlName="dobdt" readonly>
+                    <mat-error *ngIf="userform.controls.dobdt.hasError('required')">
+                      Date of Birth is required.
+                    </mat-error>
+                    <mat-datepicker-toggle matSuffix [for]="dobpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #dobpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <mat-action-row style="color:lightcoral">
+                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
+              </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <strong>Travel Details</strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-chip-list>
+                    <mat-chip *ngIf="userform.value.triptype">{{userform.value.triptype.type}}</mat-chip>
+                    <mat-chip *ngIf="userform.value.destinationCountry">{{userform.value.destinationCountry}}</mat-chip>
+                    <mat-chip *ngIf="userform.value.departureCity">
+                      <mat-icon>flight_takeoff</mat-icon>{{userform.value.departureCity.AirportName}}</mat-chip>
+                    <mat-chip *ngIf="userform.value.destinationAirport">
+                      <mat-icon>flight_land</mat-icon>{{userform.value.destinationAirport.AirportName}}</mat-chip>
+                  </mat-chip-list>
+                  <mat-icon>map</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div class="row">
+                <div class="col-md-6 col-lg-3 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <mat-select placeholder="Trip Type" (selectionChange)="setDate()" formControlName="triptype">
+                      <mat-option *ngFor="let type of TripTypes" [value]="type">
+                        {{type.type}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="userform.controls.triptype.hasError('required')">
+                      Trip Type not Selected
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6 col-lg-3 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input matInput readonly (change)="checkAirports(userform.value.destinationCountry)" placeholder="Destination Country(ReadOnly)"
+                      matTooltip="Fill SFID details to get country" formControlName="destinationCountry" />
+                    <mat-error *ngIf="userform.controls.destinationCountry.hasError('required')">
+                      Destination country is not set, Please fill SFID and try again
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-lg-3 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <mat-select placeholder="From ?" formControlName="departureCity">
+                      <mat-option *ngFor="let airport of departureAirports" [value]="airport">
+                        {{airport.AirportName}}
+                        <strong>({{airport.AirportCode}})
+                        </strong>
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="userform.controls.departureCity.hasError('required')">
+                      Departure Airport not Selected
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-md-6 col-lg-3 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <mat-select placeholder="Where To ?" formControlName="destinationAirport">
+                      <ngx-mat-select-search placeholderLabel="Search Airport" noEntriesFoundLabel="No Airports Found" [formControl]="airportFilterCtrl"></ngx-mat-select-search>
+                      <mat-option *ngFor="let airport of filteredairport | async" [value]="airport">
+                        {{airport.AirportName}}
+                        <strong>({{airport.AirportCode}})
+                        </strong>
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="userform.controls.destinationAirport.hasError('required')">
+                      Destination airport is not selected
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+              <mat-action-row>
+                <button mat-button color="warn" type="button" (click)="prevStep()">Previous</button>
+                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
+              </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <strong>Dates of Travel</strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-chip-list>
+                    <mat-chip *ngIf="userform.value.departuredt">
+                      <mat-icon>flight_takeoff</mat-icon>{{userform.value.departuredt | date}}
+                    </mat-chip>
+                    <mat-chip *ngIf="userform.value.returndt">
+                      <mat-icon>flight_land</mat-icon>{{userform.value.returndt |date}}
+                    </mat-chip>
+                  </mat-chip-list>
+                  <mat-icon>date_range</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div class="row">
+                <div class="col-md-6 col-lg-3 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input matInput placeholder="Departure Date" [min]="tommorow" (dateChange)="setReturnMinDate($event)" (dateInput)="setReturnMinDate($event)"
+                      [matDatepicker]="departurepicker" formControlName="departuredt" readonly/>
+                    <mat-error *ngIf="userform.controls.departuredt.hasError('required')">
+                      Departure Date is required.
+                    </mat-error>
+                    <mat-datepicker-toggle matSuffix [for]="departurepicker"></mat-datepicker-toggle>
+                    <mat-datepicker #departurepicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <!-- *ngIf="userform.value.triptype.value === 2" -->
+                <div class="col-md-6 col-lg-3 col-sm-12" *ngIf="twoWay">
+                  <mat-form-field class="full-width">
+                    <input matInput placeholder="Return Date" [min]="returnMinDt" [matDatepicker]="returnpicker" formControlName="returndt" readonly/>
+                    <mat-error *ngIf="userform.controls.returndt.hasError('required')">
+                      Return Date is required.
+                    </mat-error>
+                    <mat-datepicker-toggle matSuffix [for]="returnpicker"></mat-datepicker-toggle>
+                    <mat-datepicker #returnpicker></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+              <mat-action-row>
+                <button mat-button color="warn" type="button" (click)="prevStep()">Previous</button>
+                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
+              </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <strong>Contact Details</strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-chip-list>
+                    <mat-chip *ngIf="userform.controls.email.errors===null">
+                      {{userform.value.email}}
+                    </mat-chip>
+                    <mat-chip *ngIf="userform.value.departurePhone">
+                      {{userform.value.departurePhone}}
+                    </mat-chip>
+                    <mat-chip *ngIf="userform.value.destinationPhone">
+                      {{userform.value.destinationPhone}}
+                    </mat-chip>
+                  </mat-chip-list>
+                  <mat-icon>phone</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <div class="row">
+
+                <div class="col-md-6 col-lg-4 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input matInput placeholder="Email" type="email" formControlName="email" (change)="print()">
+                    <mat-error *ngIf="userform.controls.email.hasError('emailDomain') || userform.controls.email.hasError('pattern')">
+                      Use only
+                      <strong>Aramex</strong>
+                      Email Id!
+                    </mat-error>
+                    <mat-error *ngIf="userform.controls.email.hasError('required')">
+                      <strong>Aramex</strong>
+                      Email Id is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-lg-4 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input type="tel" matInput placeholder="Departure Telephone" formControlName="departurePhone">
+                    <mat-icon matSuffix>phone</mat-icon>
+                    <mat-error *ngIf="userform.controls.departurePhone.hasError('required')">
+                      Departure phone is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <!-- *ngIf="userform.value.triptype.value === 2" -->
+                <div class="col-md-6 col-lg-4 col-sm-12" *ngIf="twoWay">
+                  <mat-form-field class="full-width">
+                    <input type="tel" matInput placeholder="Destination Telephone" formControlName="destinationPhone">
+                    <mat-icon matSuffix>phone</mat-icon>
+                    <mat-error *ngIf="userform.controls.destinationPhone.hasError('required')">
+                      Destination airport is not selected
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+              </div>
+              <mat-action-row>
+                <button mat-button color="warn" type="button" (click)="prevStep()">Previous</button>
+                <button mat-button color="primary" type="button" (click)="nextStep()">Next</button>
+              </mat-action-row>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <strong>Travel Document , Comments</strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                  <mat-chip-list>
+                    <mat-chip *ngIf="userform.value.passport">
+                      Passport Copy Uploaded
+                    </mat-chip>
+                  </mat-chip-list>
+                  <mat-icon>flight_land</mat-icon>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <input type="file" name="photo" ng2FileSelect [uploader]="uploader" />
+              <button mat-raised-button type="button" color="primary" (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+                <mat-icon matSuffix>file_upload</mat-icon>
+                Upload Passport Copy
+              </button>
+              <div class="row">
+                <div class="col-md-6 col-lg-3 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <input type="text" matInput placeholder="Uploaded File Name" readonly formControlName="passport">
+                    <mat-error *ngIf="userform.controls.passport.hasError('required')">
+                      Passport Copy not uploaded
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 col-lg-3 col-sm-12">
+                  <mat-form-field class="full-width">
+                    <textarea matInput formControlName="comment" placeholder="Leave a comment"></textarea>
+                  </mat-form-field>
+                </div>
+              </div>
+              <mat-action-row>
+                <button mat-button color="warn" (click)="prevStep()">Previous</button>
+                <button type="submit" mat-button color="primary">
+                  <mat-icon>add_circle</mat-icon> Add To List
+                </button>
+              </mat-action-row>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </form>
+      </div>
+      <div class="box-spacing" *ngIf="tickets">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default">
+              <table class="table borderless" id="cart">
+                <thead>
+                  <tr>
+                    <td class="text-left">
+                      <strong>Name</strong>
+                    </td>
+                    <td class=" text-left">
+                      <strong>Date Of Birth</strong>
+                    </td>
+                    <td class=" text-left">
+                      <strong>Trip Type</strong>
+                    </td>
+                    <td class=" text-left">
+                      <strong>
+                        <mat-icon matSuffix>flight_takeoff</mat-icon>From</strong>
+                    </td>
+                    <td class=" text-left">
+                      <strong>
+                        <mat-icon matSuffix>flight_land</mat-icon>To</strong>
+                    </td>
+                    <td class=" text-left">
+                      <strong>
+                        <mat-icon matSuffix>flight_takeoff</mat-icon>Departure Dt</strong>
+                    </td>
+                    <td class=" text-left">
+                      <strong>
+                        <mat-icon matSuffix>flight_land</mat-icon>Return Dt</strong>
+                    </td>
+                    <td class=" text-left">
+                      <strong>
+                        Action
+                      </strong>
+                    </td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let ticket of tickets;let i = index" [@rowsAnimation]>
+                    <td class="text-left">
+                      <small>{{ticket.Prefix}} {{ticket.FirstName}} {{ticket.FamilyName}}
+                      </small>
+                    </td>
+                    <td class="text-left">
+                      <small>{{ticket.DateOfBirth|date}}</small>
+                    </td>
+                    <td class="text-left">
+                      <small>{{ticket.TripType}}</small>
+                    </td>
+                    <td class="text-left">
+                      <small>{{ticket.DepartureCity}}</small>
+                    </td>
+                    <td class="text-left">
+                      <small>{{ticket.DestinationAirport}}</small>
+                    </td>
+                    <td class="text-left">
+                      <small>{{ticket.DepartureDate | date}}</small>
+                    </td>
+                    <td class="text-left">
+                      <small>{{ticket.ReturnDate | date}}</small>
+                    </td>
+                    <td class="text-left">
+                      <button mat-mini-fab color="warn" (click)="removePassenger(i)">
+                        <mat-icon aria-label="Remove Passenger">remove</mat-icon>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+          <div class="col-md-12" *ngIf="tickets.length>0">
+            <button mat-raised-button color="primary" (click)="sendApproval()">
+              <mat-icon>send</mat-icon>Send For Approval
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab label="View Requests">
+    <ng-template matTabContent>
+            <app-home-request></app-home-request>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>

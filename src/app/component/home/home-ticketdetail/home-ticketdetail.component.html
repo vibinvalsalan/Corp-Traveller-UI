@@ -1,0 +1,142 @@
+<mat-toolbar>
+    <mat-toolbar-row>
+        <span>Ticket Details</span>
+        <span class="example-spacer"></span>
+        <mat-icon class="example-icon">favorite</mat-icon>
+        <mat-icon class="example-icon">delete</mat-icon>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-card class="example-card" *ngIf="tkt">
+    <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>
+            <strong>{{tkt.TicketNumber}}</strong>
+        </mat-card-title>
+        <mat-card-subtitle>Created By
+            {{tkt.CreatedBy}}
+            on
+            {{tkt.CreatedDate | date}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <strong>Current Status</strong>
+        :
+        {{GetValue(tkt.Status)}}
+    </mat-card-content>
+    <mat-card-actions>
+        <button mat-button>Cancel</button>
+        <button mat-button>Send Reminder</button>
+        <button mat-raised-button color="accent">
+            <mat-icon>cancel</mat-icon>Cancel</button>
+        <button mat-raised-button color="warn">
+            <mat-icon>add_alert</mat-icon>Send Reminder</button>
+    </mat-card-actions>
+</mat-card>
+<br>
+    <mat-accordion>
+        <mat-expansion-panel *ngFor="let tktdetail of tktdetails">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <mat-icon>account_circle</mat-icon>
+                    <strong>{{tktdetail.Prefix}}
+                        {{tktdetail.FirstName}}
+                        {{tktdetail.FamilyName}}
+                    </strong>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <mat-chip-list>
+                        <mat-chip>
+                            Destination Country :{{tktdetail.DestinationCountry}}
+                        </mat-chip>
+                        <!-- <mat-chip>From: {{tktdetail.DepartureCity}}
+          </mat-chip> -->
+                        <mat-chip>{{GetTripType(tktdetail.TripType)}}</mat-chip>
+                        <mat-chip color="primary" selected>Date of Birth:{{tktdetail.DateOfBirth | date}}</mat-chip>
+                        <mat-chip color="accent" selected>SFID:{{tktdetail.EmployeeId}}</mat-chip>
+                    </mat-chip-list>
+
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <mat-list dense>
+                <mat-list-item>
+                    <strong>Departing Flight Date({{tktdetail.DepartureDate | date}})</strong>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon>flight_takeoff</mat-icon>{{tktdetail.DepartureCity}}
+                    ({{tktdetail.DeparturePhone}})<mat-icon>phone</mat-icon>
+                </mat-list-item>
+                <mat-list-item>
+                    <img src="assets/images/dotted.png" style='height: 150%;object-fit: contain'/>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon>flight_land</mat-icon>{{tktdetail.DestinationAirport}}
+                    ({{tktdetail.DestinationPhone}})<mat-icon>phone</mat-icon>
+                </mat-list-item>
+            </mat-list>
+            <mat-divider></mat-divider>
+            <mat-list
+                dense
+                *ngIf="tktdetail.TripType === '2' || tktdetail.TripType === 'Two Way'">
+                <mat-list-item>
+                    <strong>Returning flights Date({{tktdetail.ReturnDate | date}})</strong>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon>flight_takeoff</mat-icon>{{tktdetail.DestinationAirport}}
+                    ({{tktdetail.DestinationPhone}})<mat-icon>phone</mat-icon>
+                </mat-list-item>
+                <mat-list-item>
+                    <img src="assets/images/dotted.png" style='height: 150%;object-fit: contain'/>
+                </mat-list-item>
+                <mat-list-item>
+                    <mat-icon>flight_land</mat-icon>{{tktdetail.DepartureCity}}
+                    ({{tktdetail.DeparturePhone}})<mat-icon>phone</mat-icon>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+
+        <!-- <mat-expansion-panel (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Self aware panel
+      </mat-panel-title>
+      <mat-panel-description>
+        Currently I am {{panelOpenState ? 'open' : 'closed'}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <p>I'm visible because I am open</p>
+  </mat-expansion-panel> -->
+    </mat-accordion>
+    <div style="width: 50%">
+        <mat-list dense>
+            <mat-card><strong>Ticket Logs</strong></mat-card>
+            
+            <mat-list-item>
+                <div class="d-flex w-100 justify-content-between">
+                    <strong>Action</strong>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <strong>Created By</strong>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <strong>Created Date</strong>
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    <strong>Comments</strong>
+                </div>
+            </mat-list-item>
+            <mat-list-item *ngFor="let log of tktlogs">
+                <div class="d-flex w-100 justify-content-between">
+                    {{log.Action}}
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    {{log.CreatedBy}}
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    {{log.CreatedDate | date}}
+                </div>
+                <div class="d-flex w-100 justify-content-between">
+                    {{log.Comment}}
+                </div>
+            </mat-list-item>
+        </mat-list>
+      </div>
